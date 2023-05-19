@@ -34,8 +34,15 @@ jobs:
   Plan:
     needs: Validation
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.terraform_path }}
     steps:
-      - name: Install Terragrunt
+      - name: Terragrunt Install
         run: |
           wget -O /tmp/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.8/terragrunt_linux_amd64
           chmod +x /tmp/terragrunt && sudo mv /tmp/terragrunt /usr/local/bin/terragrunt
+      - name: Terragrunt init
+        run: |
+          terragrunt init
