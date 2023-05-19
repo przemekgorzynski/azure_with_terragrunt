@@ -10,23 +10,21 @@ on:
 
 env:
   terraform_path: "./terraform"
-  
+
 jobs:
   Validation:
     runs-on: ubuntu-latest
+    working-directory: ${{ env.terraform_path }}
     steps:
       - name: Terraform Installation
         uses: hashicorp/setup-terraform@v2
       - name: Terraform Validate
-        working-directory: ${{ env.terraform_path }}
         run: |
           terraform init -backend=false
           terraform validate
       - name: Tfsec scan
-        working-directory: ${{ env.terraform_path }}
         uses: triat/terraform-security-scan@v3.0.3
       - name: Checkov scan
-        working-directory: ${{ env.terraform_path }}
         run: |
           pip3 install checkov
           checkov -d ${{ env.terraform_path }} --framework terraform --download-external-modules true
