@@ -11,7 +11,7 @@ trigger:
       - envs/dev/*
       - pipelines/pipeline-dev.yml
 
-pool: vmss-usec-dev-weu-vmss-001
+pool: Azure Pipelines
 
 resources:
   repositories:
