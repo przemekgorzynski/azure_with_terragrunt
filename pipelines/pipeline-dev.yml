@@ -13,6 +13,12 @@ trigger:
 
 pool: vmss-usec-dev-weu-vmss-001
 
+resources:
+  repositories:
+    - repository: PipelineTemplates
+      type: github
+      name: przemekgorzynski/PipelineTemplates
+
 parameters:
   - name: action
     displayName: Action
@@ -40,7 +46,7 @@ stages:
     jobs:
       - job: TFsec
         steps:
-          - template: security/scan.yml
+          - template: Azure_DevOps/security/terraform_scan.yml@PipelineTemplates
             parameters:
               ServiceConnection: ${{ variables.ServiceConnection }}
   - stage: Install_Terragrunt
@@ -48,7 +54,7 @@ stages:
     jobs:
       - job: Terragrunt_Installation
         steps:
-          - template: terragrunt_steps/install.yml
+          - template: Azure_DevOps/terragrunt/install.yml@PipelineTemplates
   - stage: Plan
     condition: eq('${{ parameters.Action }}', 'Plan')
     dependsOn: [Install_Terragrunt]
@@ -56,12 +62,12 @@ stages:
       - job: Plan
         timeoutInMinutes: 20
         steps:
-          - template: terragrunt_steps/init.yml
+          - template: Azure_DevOps/terragrunt/init.yml@PipelineTemplates
             parameters:
               env: ${{ variables.env }}
               ServiceConnection: ${{ variables.ServiceConnection }}
               TargetSubscriptionID: ${{ variables.TargetSubscriptionID }}
-          - template: terragrunt_steps/plan.yml
+          - template: Azure_DevOps/terragrunt/plan.yml@PipelineTemplates
             parameters:
               env: ${{ variables.env }}
               ServiceConnection: ${{ variables.ServiceConnection }}
@@ -72,18 +78,34 @@ stages:
     jobs:
       - job: Apply
         steps:
-          - template: terragrunt_steps/init.yml
+          - template: Azure_DevOps/terragrunt/init.yml@PipelineTemplates
             parameters:
               env: ${{ variables.env }}
               ServiceConnection: ${{ variables.ServiceConnection }}
               TargetSubscriptionID: ${{ variables.TargetSubscriptionID }}
-          - template: terragrunt_steps/plan.yml
+          - template: Azure_DevOps/terragrunt/plan.yml@PipelineTemplates
             parameters:
               env: ${{ variables.env }}
               ServiceConnection: ${{ variables.ServiceConnection }}
               TargetSubscriptionID: ${{ variables.TargetSubscriptionID }}
-          - template: terragrunt_steps/apply.yml
+          - template: Azure_DevOps/terragrunt/apply.yml@PipelineTemplates
             parameters:
               env: ${{ variables.env }}
               ServiceConnection: ${{ variables.ServiceConnection }}
               TargetSubscriptionID: ${{ variables.TargetSubscriptionID }}
+  - stage: Destroy
+    condition: eq('${{ parameters.Action }}', 'Destroy')
+    dependsOn: [Install_Terragrunt]
+    jobs:
+      - job: Destroy
+        steps:
+          - template: Azure_DevOps/terragrunt/init.yml@PipelineTemplates
+            parameters:
+              env: ${{ variables.env }}
+              ServiceConnection: ${{ variables.ServiceConnection }}
+              TargetSubscriptionID: ${{ variables.TargetSubscriptionID }}
+          - template: Azure_DevOps/terragrunt/destroy.yml@PipelineTemplates
+            parameters:
+              env: ${{ variables.env }}
+              ServiceConnection: ${{ variables.ServiceConnection }}
+              TargetSubscriptionID: ${{ variables.TargetSubscriptionID }}              
