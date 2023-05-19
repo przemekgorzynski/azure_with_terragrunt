@@ -19,10 +19,11 @@ jobs:
         run: |
           ls -la ${{ vars.GITHUB_WORKSPACE }}
           tree ${{ vars.GITHUB_WORKSPACE }}
+          ls -la $terraform_path
       - name: Terraform Installation
         uses: hashicorp/setup-terraform@v2
       - name: Terraform Validate
-        working-directory: $env.terraform_path
+        working-directory: $terraform_path
         run: |
           terraform init -backend=false
           terraform validate
