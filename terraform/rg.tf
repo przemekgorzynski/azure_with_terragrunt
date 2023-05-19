@@ -23,11 +23,7 @@ provider "azurerm" {
   skip_provider_registration = true
 }
 
-module "MyAzResourceGroup" {
-  source   = "XXX"
-  project  = var.project
-  stage    = var.stage
-  context  = var.context
-  instance = var.instance
-  location = var.location
+resource "azurerm_resource_group" "example" {
+  name     = "example_rg"
+  location = "West Europe"
 }

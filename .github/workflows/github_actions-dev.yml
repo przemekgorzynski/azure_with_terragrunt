@@ -1,5 +1,5 @@
 name: Dev
-run-name: Runned ${{ github.head_ref }} branch by @${{ github.actor }}
+run-name: Runned ${{ github.ref }} branch by @${{ github.actor }}
 
 on:
   push:
