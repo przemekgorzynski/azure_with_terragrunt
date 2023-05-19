@@ -8,7 +8,7 @@ on:
 
 env:
   terraform_path: ./terraform
-  environment: dev
+  environment: ./envs/dev
 
 jobs:
   Validation:
@@ -38,13 +38,14 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: /envs/${{ env.environment }}
+        working-directory: ${{ env.environment }}
     steps:
       - name: Terragrunt Install
         run: |
           echo $PWD
           wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.8/terragrunt_linux_amd64
           ls -la  /usr/local/bin/terragrunt
+          chmod +x /usr/local/bin/terragrunt
       - name: Terragrunt init
         run: |
           terragrunt init
