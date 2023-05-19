@@ -1,5 +1,5 @@
 name: Dev
-run-name: Runned ${{ github.ref }} branch by @${{ github.actor }}
+run-name: Commit ${{ github.event.head_commit.message }} by @${{ github.actor }}
 
 on:
   push:
@@ -8,29 +8,33 @@ on:
     branches: [ "master" ]
   workflow_dispatch:              # Allows you to run this workflow manually from the Actions tab
 
+env:
+  terraform_path: "./terraform"
+  
 jobs:
-  Installation:
+  Validation:
     runs-on: ubuntu-latest
     steps:
-      - uses: hashicorp/setup-terraform@v2
-        name: Install Terraform
-      - name: Install Checkov
+      - name: Terraform Installation
+        uses: hashicorp/setup-terraform@v2
+      - name: Terraform Validate
+        working-directory: ${{ env.terraform_path }}
+        run: |
+          terraform init -backend=false
+          terraform validate
+      - name: Tfsec scan
+        working-directory: ${{ env.terraform_path }}
+        uses: triat/terraform-security-scan@v3.0.3
+      - name: Checkov scan
+        working-directory: ${{ env.terraform_path }}
         run: |
           pip3 install checkov
+          checkov -d ${{ env.terraform_path }} --framework terraform --download-external-modules true
+  Plan:
+    needs: Validation
+    runs-on: ubuntu-latest
+    steps:
       - name: Install Terragrunt
         run: |
           wget -O /tmp/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.8/terragrunt_linux_amd64
           chmod +x /tmp/terragrunt && sudo mv /tmp/terragrunt /usr/local/bin/terragrunt
-  Validation:
-    needs: Installation
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Tfsec scan
-        uses: triat/terraform-security-scan@v3.0.3
-      - name: Run Tests
-        working-directory: ./terraform
-        run: |
-          terraform init -backend=false
-          terraform validate
-          checkov -d . --framework terraform --download-external-modules true
