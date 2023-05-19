@@ -7,13 +7,14 @@ on:
   workflow_dispatch:              # Allows you to run this workflow manually from the Actions tab
 
 env:
-  terraform_path: "/terraform"
+  terraform_path: "${{ GITHUB_WORKSPACE }}/terraform"
 
 jobs:
   Validation:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout 
+        uses: actions/checkout@v2
       - name: Terraform Installation
         uses: hashicorp/setup-terraform@v2
       - name: Terraform Validate
