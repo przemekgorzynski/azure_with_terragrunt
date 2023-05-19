@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ${{ terraform_path }}
+        working-directory: ${{ env.terraform_path }}
     steps:
       - name: Checkout 
         uses: actions/checkout@v2
