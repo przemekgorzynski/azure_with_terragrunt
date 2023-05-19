@@ -6,14 +6,11 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-runs-on: ubuntu-latest
+  workflow_dispatch:              # Allows you to run this workflow manually from the Actions tab
 
 jobs:
   Installation:
+    runs-on: ubuntu-latest
     steps:
       - uses: hashicorp/setup-terraform@v2
         name: Install Terraform
@@ -26,6 +23,7 @@ jobs:
           chmod +x /tmp/terragrunt && sudo mv /tmp/terragrunt /usr/local/bin/terragrunt
   Validation:
     needs: Installation
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Tfsec scan
