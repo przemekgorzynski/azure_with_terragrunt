@@ -1,5 +1,5 @@
 name: Dev
-run-name: Commit ${{ github.event.head_commit.message }} by @${{ github.actor }}
+run-name: Commit \"${{ github.event.head_commit.message }}\" by @${{ github.actor }}
 
 on:
   push:
@@ -44,7 +44,7 @@ jobs:
         run: |
           echo $PWD
           wget -O /usr/local/bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.45.8/terragrunt_linux_amd64
-          chmod +x /usr/local/bin/terragrunt
+          ls -la  /usr/local/bin/terragrunt
       - name: Terragrunt init
         run: |
           terragrunt init
