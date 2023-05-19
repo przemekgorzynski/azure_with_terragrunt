@@ -23,15 +23,15 @@ jobs:
       - name: Terraform Installation
         uses: hashicorp/setup-terraform@v2
       - name: Terraform Validate
-        working-directory: $terraform_path
         run: |
+          cd terraform_path
           terraform init -backend=false
           terraform validate
       - name: Tfsec scan
         uses: triat/terraform-security-scan@v3.0.3
       - name: Checkov scan
-        working-directory: $terraform_path
         run: |
+          cd terraform_path
           pip3 install checkov
           checkov -d $terraform_path --framework terraform --download-external-modules true
   Plan:
