@@ -1,5 +1,5 @@
 name: Dev
-run-name: Commit \"${{ github.event.head_commit.message }}\" by @${{ github.actor }}
+run-name: Commit "${{ github.event.head_commit.message }}" by @${{ github.actor }}
 
 on:
   push:
@@ -38,7 +38,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./envs/${{ env.environment }}
+        working-directory: /envs/${{ env.environment }}
     steps:
       - name: Terragrunt Install
         run: |
