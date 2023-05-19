@@ -7,7 +7,7 @@ on:
   workflow_dispatch:              # Allows you to run this workflow manually from the Actions tab
 
 env:
-  terraform_path: "${{ GITHUB_WORKSPACE }}/terraform"
+  terraform_path: "${{ vars.GITHUB_WORKSPACE }}/terraform"
 
 jobs:
   Validation:
