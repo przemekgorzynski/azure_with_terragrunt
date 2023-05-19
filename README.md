@@ -4,7 +4,7 @@
 --------------------------------------------
 
 ## Azure Devops
-https://dev.azure.com/pgorzynski/personal/_apis/build/status%2FTerragrunt%20-%20dev?branchName=main
+![Dev](https://dev.azure.com/pgorzynski/personal/_apis/build/status%2FTerragrunt%20-%20dev?branchName=main)
 
 --------------------------------------------
 
