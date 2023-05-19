@@ -15,6 +15,10 @@ jobs:
     steps:
       - name: Checkout 
         uses: actions/checkout@v2
+      - name: ls
+        run: |
+          ls -la ${{ vars.GITHUB_WORKSPACE }}
+          tree ${{ vars.GITHUB_WORKSPACE }}
       - name: Terraform Installation
         uses: hashicorp/setup-terraform@v2
       - name: Terraform Validate
