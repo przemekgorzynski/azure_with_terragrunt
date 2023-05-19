@@ -1,5 +1,5 @@
 name: Dev
-run-name: Runned {{ github.head_ref }} branch by @${{ github.actor }}
+run-name: Runned ${{ github.head_ref }} branch by @${{ github.actor }}
 
 on:
   push:
@@ -23,3 +23,10 @@ jobs:
       - name: Install Checkov
         run: |
           pip3 install checkov
+      - name: Run Tests
+        working-directory: ./terraform
+        run: |
+          terraform init -backend=false
+          terraform validate
+          tfsec  .
+          checkov -d . --framework terraform --download-external-modules true
