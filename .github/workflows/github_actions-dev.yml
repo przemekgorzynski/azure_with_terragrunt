@@ -38,7 +38,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./envs/${{ env.environment }}
+        working-directory: ./envs/${{ env.environment }}/config
     steps:
       - name: Checkout 
         uses: actions/checkout@v2
